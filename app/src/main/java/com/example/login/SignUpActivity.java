@@ -30,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mAuth=FirebaseAuth.getInstance();
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
+        findViewById(R.id.textViewSignup).setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
     }
 
@@ -67,7 +68,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 progressBar.setVisibility(View.GONE);
 
                if(task.isSuccessful()){
-                   Toast.makeText(getApplicationContext(), "User Registration Success",Toast.LENGTH_SHORT).show();
+                   Intent intent = new Intent(SignUpActivity.this,Notes.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   startActivity(intent);
                }
                else {
 
@@ -75,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                        Toast.makeText(getApplicationContext(),"Already Registered",Toast.LENGTH_SHORT).show();
                    }
                    else {
-                       Toast.makeText(getApplicationContext(),"Error ",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                    }
                }
             }
