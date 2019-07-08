@@ -8,10 +8,14 @@ import android.content.Intent;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Notes extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,7 +26,9 @@ public class Notes extends AppCompatActivity implements View.OnClickListener {
     private TextView textViewUserEmail;
     private Button buttonLogout;
 
-
+private DatabaseReference databaseReference;
+private EditText editTextTitle, editTextNotes;
+private Button buttonSave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,11 @@ public class Notes extends AppCompatActivity implements View.OnClickListener {
             startActivity(new Intent(this, MainActivity.class));
         }
 
+
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+        editTextTitle =(EditText) findViewById(R.id.editTextTitle);
+        editTextNotes = (EditText) findViewById(R.id.editTextNotes);
+        buttonSave =(Button) findViewById(R.id.buttonSave);
         //getting current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
@@ -52,8 +63,18 @@ public class Notes extends AppCompatActivity implements View.OnClickListener {
 
         //adding listener to button
         buttonLogout.setOnClickListener(this);
+        buttonSave.setOnClickListener(this);
     }
 
+    private void saveUserInformation(){
+String title =editTextTitle.getText().toString().trim();
+String notes = editTextNotes.getText().toString().trim();
+
+UserInformation userInformation = new UserInformation(title,notes);
+FirebaseUser user = firebaseAuth.getCurrentUser();
+databaseReference.child(user.getUid()).setValue(userInformation);
+        Toast.makeText(this, "Information Saved", Toast.LENGTH_LONG).show();
+    }
     @Override
     public void onClick(View view) {
         //if logout is pressed
@@ -64,6 +85,9 @@ public class Notes extends AppCompatActivity implements View.OnClickListener {
             finish();
             //starting login activity
             startActivity(new Intent(this, MainActivity.class));
+        }
+        if (view == buttonSave){
+            saveUserInformation();
         }
     }
 }
