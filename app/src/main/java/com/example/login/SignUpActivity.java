@@ -30,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mAuth=FirebaseAuth.getInstance();
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
-        findViewById(R.id.textViewSignup).setOnClickListener(this);
+        findViewById(R.id.textViewLogin).setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
     }
 
